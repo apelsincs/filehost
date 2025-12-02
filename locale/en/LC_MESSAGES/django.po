@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-05 13:46+0800\n"
+"POT-Creation-Date: 2025-09-11 06:27+0300\n"
 "PO-Revision-Date: 2025-09-05 13:46+0800\n"
 "Last-Translator: AUTO <EMAIL@ADDRESS>\n"
 "Language-Team: English <LL@li.org>\n"
@@ -17,511 +17,690 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: files/forms.py:18
 msgid "Введите желаемый код (необязательно)"
 msgstr "Enter desired code (optional)"
 
+#: files/forms.py:19 files/forms.py:144
 msgid "Любые символы"
 msgstr "Any characters"
 
-msgid "Любые символы, до 50 знаков. Оставьте пустым для автоматической генерации 6-значного числового кода."
-msgstr "Any characters, up to 50 characters. Leave empty for automatic generation of 6-digit numeric code."
-
+#: files/forms.py:21
 msgid "Оставьте пустым для автоматической генерации"
 msgstr "Leave empty for automatic generation"
 
+#: files/forms.py:29
 msgid "Введите пароль (необязательно)"
 msgstr "Enter password (optional)"
 
+#: files/forms.py:31
 msgid "Оставьте пустым для доступа без пароля"
 msgstr "Leave empty for public access"
 
+#: files/forms.py:39
 msgid "Защитить паролем"
 msgstr "Protect with password"
 
+#: files/forms.py:55
 #, python-format
 msgid "Максимальный размер: %(size)s МБ"
 msgstr "Maximum size: %(size)s MB"
 
+#: files/forms.py:64
 msgid "Пожалуйста, выберите файл для загрузки."
 msgstr "Please select a file to upload."
 
+#: files/forms.py:69
 #, python-format
 msgid "Размер файла не должен превышать %(size)s МБ."
 msgstr "File size must not exceed %(size)s MB."
 
-msgid "Код не указан"
-msgstr "Code not specified"
-
-msgid "Код занят"
-msgstr "Code taken"
-
-msgid "Код доступен"
-msgstr "Code available"
-
+#: files/forms.py:81 files/forms.py:173
 msgid "Этот код уже используется. Выберите другой."
 msgstr "This code is already in use. Choose another."
 
+#: files/forms.py:93
 msgid "Укажите пароль, если включена защита."
 msgstr "Provide a password when protection is enabled."
 
+#: files/forms.py:108
 #, fuzzy
 #| msgid "У вас нет прав для доступа к этой странице."
 msgid "Введите пароль для доступа к файлу"
 msgstr "Enter the password to access the file"
 
+#: files/forms.py:111 templates/files/delete_file.html:56
+#: templates/files/file_detail.html:99
 msgid "Пароль"
 msgstr "Password"
 
+#: files/forms.py:128 files/views.py:216
 #, fuzzy
 #| msgid "Неверный запрос."
 msgid "Неверный пароль."
 msgstr "Incorrect password."
 
+#: files/forms.py:143
 msgid "Введите новый код"
 msgstr "Enter new code"
 
+#: files/forms.py:148
 msgid "Оставьте пустым, чтобы не изменять"
 msgstr "Leave empty to keep unchanged"
 
+#: files/forms.py:156
 msgid "Введите новый пароль"
 msgstr "Enter new password"
 
+#: files/forms.py:158
 msgid "Оставьте пустым, чтобы убрать пароль"
 msgstr "Leave empty to remove the password"
 
+#: files/views.py:124
 #, python-format
 msgid "Файл успешно загружен! Код: %(code)s"
 msgstr "File uploaded successfully! Code: %(code)s"
 
+#: files/views.py:201
 msgid "Файл истек и больше недоступен."
 msgstr "File has expired and is no longer available."
 
+#: files/views.py:265
+#, fuzzy
+#| msgid "Неверный запрос."
+msgid "Неверный пароль"
+msgstr "Incorrect password."
+
+#: files/views.py:290 files/views.py:480 files/views.py:484
+#, fuzzy
+#| msgid "Страница не найдена (404)"
+msgid "Файл не найден"
+msgstr "Session not found"
+
+#: files/views.py:292 files/views.py:488
+#, fuzzy
+#| msgid "Истек"
+msgid "Файл истек"
+msgstr "Expired"
+
+#: files/views.py:380
 msgid "Файл истек и больше недоступен для редактирования."
 msgstr "File has expired and is no longer available for editing."
 
+#: files/views.py:403
 msgid "Информация о файле обновлена!"
 msgstr "File information updated!"
 
+#: files/views.py:436
 msgid "Файл истек и больше недоступен для удаления."
 msgstr "File has expired and is no longer available for deletion."
 
+#: files/views.py:442
 msgid "Файл успешно удален!"
 msgstr "File deleted successfully!"
 
+#: files/views.py:459
+msgid "Код не указан"
+msgstr "Code not specified"
+
+#: templates/400.html:4
 msgid "Неверный запрос (400)"
 msgstr "Bad request (400)"
 
+#: templates/400.html:11
 msgid "Неверный запрос."
 msgstr "The request was invalid."
 
+#: templates/400.html:15 templates/403.html:15 templates/404.html:12
+#: templates/500.html:12 templates/files/password_required.html:58
 msgid "Вернуться на главную"
 msgstr "Back to home"
 
+#: templates/403.html:4
 msgid "Доступ запрещен (403)"
 msgstr "Forbidden (403)"
 
+#: templates/403.html:11
 msgid "У вас нет прав для доступа к этой странице."
 msgstr "You do not have permission to access this page."
 
+#: templates/404.html:4
 msgid "Страница не найдена (404)"
 msgstr "Page not found (404)"
 
+#: templates/404.html:11
 msgid "К сожалению, такая страница не существует."
 msgstr "Unfortunately, this page does not exist."
 
+#: templates/500.html:4
 msgid "Внутренняя ошибка сервера (500)"
 msgstr "Internal server error (500)"
 
+#: templates/500.html:11
 msgid "Что-то пошло не так. Мы уже работаем над этим."
 msgstr "Something went wrong. We are working on it."
 
+#: templates/base.html:38
 msgid "Основная навигация"
 msgstr "Main navigation"
 
+#: templates/base.html:50
 msgid "Главная"
 msgstr "Home"
 
+#: templates/base.html:54 templates/files/recent_files.html:19
+#: templates/files/search_results.html:163
 msgid "Мои файлы"
 msgstr "My files"
 
+#: templates/base.html:61
 msgid "Поиск по файлам"
 msgstr "Search files"
 
+#: templates/base.html:63
 msgid "Поиск файлов"
 msgstr "Search files"
 
+#: templates/base.html:64 templates/files/search_results.html:26
 msgid "Поиск среди ваших файлов..."
 msgstr "Search among your files..."
 
+#: templates/base.html:65 templates/files/search_results.html:4
 msgid "Поиск"
 msgstr "Search"
 
+#: templates/base.html:66
 msgid "Найти"
 msgstr "Find"
 
+#: templates/base.html:73
 msgid "Переключение темы"
 msgstr "Theme switcher"
 
+#: templates/base.html:74
 msgid "Светлая тема (Ctrl+T)"
 msgstr "Light theme (Ctrl+T)"
 
+#: templates/base.html:74
 msgid "Светлая тема"
 msgstr "Light theme"
 
+#: templates/base.html:77
 msgid "Темная тема (Ctrl+T)"
 msgstr "Dark theme (Ctrl+T)"
 
+#: templates/base.html:77
 msgid "Темная тема"
 msgstr "Dark theme"
 
+#: templates/base.html:86 templates/base.html:87
 msgid "Выбор языка"
 msgstr "Language selection"
 
+#: templates/base.html:128
 msgid "Быстрая и безопасная передача файлов"
 msgstr "Fast and secure file transfer"
 
+#: templates/base.html:131
 msgid "Все права защищены."
 msgstr "All rights reserved."
 
+#: templates/base.html:141
 msgid "Мы используем cookies для улучшения работы сайта."
 msgstr "We use cookies to improve site performance."
 
+#: templates/base.html:144
 msgid "Согласен"
 msgstr "OK"
 
+#: templates/files/delete_file.html:4
 msgid "Удалить"
 msgstr "Delete"
 
+#: templates/files/delete_file.html:15
 msgid "Подтверждение удаления"
 msgstr "Delete confirmation"
 
+#: templates/files/delete_file.html:24 templates/files/delete_file.html:51
+#: templates/files/home.html:199 templates/files/password_required.html:24
+#: templates/files/recent_files.html:68 templates/files/search_results.html:66
 msgid "Код:"
 msgstr "Code:"
 
+#: templates/files/delete_file.html:25 templates/files/delete_file.html:46
+#: templates/files/password_required.html:25
 msgid "МБ"
 msgstr "MB"
 
+#: templates/files/delete_file.html:33
 msgid "Внимание!"
 msgstr "Attention!"
 
+#: templates/files/delete_file.html:36
 #, python-format
 msgid "Вы собираетесь удалить файл \"<strong>%(filename)s</strong>\"."
 msgstr "You are about to delete the file \"<strong>%(filename)s</strong>\"."
 
+#: templates/files/delete_file.html:37
 msgid "Это действие нельзя отменить. Файл будет удален навсегда."
 msgstr "This action cannot be undone. The file will be permanently deleted."
 
+#: templates/files/delete_file.html:43
 #, fuzzy
 #| msgid "Поиск по файлам"
 msgid "Детали файла:"
 msgstr "File details:"
 
+#: templates/files/delete_file.html:46 templates/files/home.html:203
 msgid "Размер:"
 msgstr "Size:"
 
+#: templates/files/delete_file.html:47
 msgid "Загружен:"
 msgstr "Uploaded:"
 
+#: templates/files/delete_file.html:48 templates/files/home.html:215
 msgid "Скачиваний:"
 msgstr "Downloads:"
 
+#: templates/files/delete_file.html:52 templates/files/home.html:219
+#: templates/files/recent_files.html:126
 msgid "Истекает:"
 msgstr "Expires:"
 
+#: templates/files/delete_file.html:54
 msgid "Защита:"
 msgstr "Protection:"
 
+#: templates/files/delete_file.html:58 templates/files/file_detail.html:103
 msgid "Открытый"
 msgstr "Public"
 
+#: templates/files/delete_file.html:72
 msgid "Да, удалить файл"
 msgstr "Yes, delete file"
 
+#: templates/files/delete_file.html:78
 msgid "Отмена"
 msgstr "Cancel"
 
+#: templates/files/delete_file.html:90
 msgid "Что произойдет при удалении?"
 msgstr "What happens when deleting?"
 
+#: templates/files/delete_file.html:95
 msgid "Файл будет удален с сервера навсегда"
 msgstr "The file will be removed from the server permanently"
 
+#: templates/files/delete_file.html:96
 msgid "QR код также будет удален"
 msgstr "The QR code will also be deleted"
 
+#: templates/files/delete_file.html:97
 msgid "Ссылка на файл перестанет работать"
 msgstr "The file link will stop working"
 
+#: templates/files/delete_file.html:98
 msgid "Восстановить файл будет невозможно"
 msgstr "Restoring the file will be impossible"
 
+#: templates/files/file_detail.html:33 templates/files/home.html:318
 #, fuzzy
 #| msgid "Мои файлы"
 msgid "Код файла"
 msgstr "File code"
 
+#: templates/files/file_detail.html:43
 #, fuzzy
 #| msgid "Поиск по файлам"
 msgid "Тип файла"
 msgstr "File type"
 
+#: templates/files/file_detail.html:53 templates/files/home.html:328
+#: templates/files/recent_files.html:80 templates/files/search_results.html:77
 msgid "Размер"
 msgstr "Size"
 
+#: templates/files/file_detail.html:63 templates/files/recent_files.html:92
+#: templates/files/search_results.html:108
 msgid "Загружен"
 msgstr "Uploaded"
 
+#: templates/files/file_detail.html:73 templates/files/home.html:338
 msgid "Истекает"
 msgstr "Expires"
 
+#: templates/files/file_detail.html:85 templates/files/recent_files.html:86
+#: templates/files/search_results.html:81
 msgid "Скачиваний"
 msgstr "Downloads"
 
+#: templates/files/file_detail.html:95
 msgid "Защита"
 msgstr "Protection"
 
+#: templates/files/file_detail.html:118 templates/files/home.html:371
 #, fuzzy
 #| msgid "Поиск файлов"
 msgid "Скачать файл"
 msgstr "Download file"
 
+#: templates/files/file_detail.html:125 templates/files/home.html:233
+msgid "Просмотр"
+msgstr "View"
+
+#: templates/files/file_detail.html:132
 msgid "Редактировать"
 msgstr "Edit"
 
+#: templates/files/file_detail.html:142 templates/files/home.html:367
 msgid "Копировать ссылку"
 msgstr "Copy link"
 
+#: templates/files/file_detail.html:149
 #, fuzzy
 #| msgid "Мои файлы"
 msgid "Удалить файл"
 msgstr "Delete file"
 
+#: templates/files/file_detail.html:161 templates/files/home.html:350
 msgid "QR код"
 msgstr "QR code"
 
+#: templates/files/file_detail.html:173
 msgid "Скачать QR код"
 msgstr "Download QR code"
 
+#: templates/files/file_detail.html:178
 msgid "Поделиться"
 msgstr "Share"
 
+#: templates/files/file_detail.html:184 templates/files/home.html:354
 msgid "QR код генерируется..."
 msgstr "QR code is generating..."
 
+#: templates/files/file_detail.html:198
 #, fuzzy
 #| msgid "Поиск по файлам"
 msgid "Ссылка на файл"
 msgstr "File link"
 
+#: templates/files/file_detail.html:212
 msgid "Поделитесь этой ссылкой для доступа к файлу"
 msgstr "Share this link to access the file"
 
+#: templates/files/file_detail.html:222
 msgid "Оставшееся время"
 msgstr "Time remaining"
 
+#: templates/files/file_detail.html:231
 #, python-format
 msgid "Файл будет автоматически удален %(date)s"
 msgstr "The file will be automatically deleted on %(date)s"
 
+#: templates/files/home.html:4 templates/files/home.html:10
 #, fuzzy
 #| msgid "Быстрая и безопасная передача файлов"
 msgid "Быстрая передача файлов"
 msgstr "Fast file transfer"
 
+#: templates/files/home.html:11
 msgid ""
 "Загружайте файлы мгновенно и делитесь ими безопасно. Автоматическое удаление "
 "через 24 часа."
-msgstr "Upload files instantly and share securely. Automatically deleted after 24 hours."
+msgstr ""
+"Upload files instantly and share securely. Automatically deleted after 24 "
+"hours."
 
+#: templates/files/home.html:15 templates/files/home.html:126
+#: templates/files/recent_files.html:190 templates/files/recent_files.html:203
+#: templates/files/search_results.html:48
+#: templates/files/search_results.html:167
 msgid "Загрузить файл"
 msgstr "Upload file"
 
+#: templates/files/home.html:19 templates/files/recent_files.html:4
 #, fuzzy
 #| msgid "Мои файлы"
 msgid "Последние файлы"
 msgstr "Recent files"
 
+#: templates/files/home.html:28
 msgid "Почему 0123.ru?"
 msgstr "Why 0123.ru?"
 
+#: templates/files/home.html:29
 msgid "Быстрая передача файлов без регистрации и лишних хлопот"
 msgstr "Fast file transfer without registration or hassle"
 
+#: templates/files/home.html:36
 #, fuzzy
 #| msgid "Основная навигация"
 msgid "Мгновенная загрузка"
 msgstr "Instant upload"
 
+#: templates/files/home.html:37
 msgid ""
 "Загружайте файлы до 25MB за считанные секунды с интуитивно понятным "
 "интерфейсом"
-msgstr ""
-"Upload files up to 25MB in seconds with an intuitive interface"
+msgstr "Upload files up to 25MB in seconds with an intuitive interface"
 
+#: templates/files/home.html:44
 msgid "QR-коды"
 msgstr "QR codes"
 
+#: templates/files/home.html:45
 msgid "Генерируйте QR-коды для быстрого доступа к файлам с мобильных устройств"
 msgstr "Generate QR codes for quick access on mobile devices"
 
+#: templates/files/home.html:52 templates/files/password_required.html:68
 msgid "Безопасность"
 msgstr "Security"
 
+#: templates/files/home.html:53
 msgid "Защищайте файлы паролем и автоматически удаляйте их через 24 часа"
 msgstr "Protect files with a password and auto-delete after 24 hours"
 
+#: templates/files/home.html:60
 msgid "Адаптивность"
 msgstr "Responsiveness"
 
+#: templates/files/home.html:61
 msgid "Адаптивный интерфейс, который отлично работает на всех устройствах"
 msgstr "Responsive UI that works great on all devices"
 
+#: templates/files/home.html:74
 #, fuzzy
 #| msgid "Поиск по файлам"
 msgid "Загрузка файла"
 msgstr "File upload"
 
+#: templates/files/home.html:86
 msgid "Перетащите файл сюда или нажмите для выбора"
 msgstr "Drag a file here or click to select"
 
+#: templates/files/home.html:87
 msgid "Максимальный размер: 25MB"
 msgstr "Maximum size: 25MB"
 
+#: templates/files/home.html:94
 msgid "Кастомный код (необязательно)"
 msgstr "Custom code (optional)"
 
+#: templates/files/home.html:96
 msgid "Введите желаемый код для файла"
 msgstr "Enter desired code for the file"
 
+#: templates/files/home.html:101
 msgid ""
-"Любые символы, до 50 знаков. Оставьте пустым для автоматической генерации."
-msgstr "Any characters, up to 50 chars. Leave empty for auto-generation."
+"Любые символы, до 50 знаков. Оставьте пустым для автоматической генерации 6-"
+"значного числового кода."
+msgstr ""
+"Any characters, up to 50 characters. Leave empty for automatic generation of "
+"6-digit numeric code."
 
+#: templates/files/home.html:114
 msgid "Пароль (необязательно)"
 msgstr "Password (optional)"
 
+#: templates/files/home.html:116
 msgid "Защитить файл паролем"
 msgstr "Protect file with password"
 
+#: templates/files/home.html:142
 #, fuzzy
 #| msgid "Поиск файлов"
 msgid "Всего файлов"
 msgstr "Total files"
 
+#: templates/files/home.html:148
 msgid "Загружено сегодня"
 msgstr "Uploaded today"
 
+#: templates/files/home.html:154
 msgid "Максимальный размер"
 msgstr "Maximum size"
 
+#: templates/files/home.html:160
 msgid "Время хранения"
 msgstr "Retention time"
 
+#: templates/files/home.html:171
 #, fuzzy
 #| msgid "Мои файлы"
 msgid "Мои недавние файлы"
 msgstr "My recent files"
 
+#: templates/files/home.html:184
 msgid "назад"
 msgstr "ago"
 
+#: templates/files/home.html:191 templates/files/home.html:240
+#: templates/files/password_required.html:15
 msgid "Файл защищен паролем"
 msgstr "File is password-protected"
 
+#: templates/files/home.html:222
 msgid "Истек"
 msgstr "Expired"
 
-msgid "Просмотр"
-msgstr "View"
-
+#: templates/files/home.html:237 templates/files/recent_files.html:109
+#: templates/files/search_results.html:100
 msgid "Скачать"
 msgstr "Download"
 
+#: templates/files/home.html:252 templates/files/recent_files.html:183
 #, fuzzy
 #| msgid "Поиск файлов"
 msgid "У вас пока нет файлов"
 msgstr "You don't have any files yet"
 
+#: templates/files/home.html:253 templates/files/recent_files.html:186
 msgid "Загрузите первый файл, чтобы начать!"
 msgstr "Upload your first file to get started!"
 
+#: templates/files/home.html:260
 #, fuzzy
 #| msgid "Поиск среди ваших файлов..."
 msgid "Посмотреть все мои файлы"
 msgstr "View all my files"
 
+#: templates/files/home.html:281
 msgid "Файл успешно загружен!"
 msgstr "File uploaded successfully!"
 
+#: templates/files/home.html:283
 msgid "Ваш файл готов к использованию"
 msgstr "Your file is ready to use"
 
+#: templates/files/home.html:308
 #, fuzzy
 #| msgid "Поиск файлов"
 msgid "Имя файла"
 msgstr "File name"
 
+#: templates/files/home.html:362
 msgid "Быстрые действия"
 msgstr "Quick actions"
 
+#: templates/files/home.html:384
 msgid "Загрузить еще файл"
 msgstr "Upload another file"
 
+#: templates/files/home.html:388
 #, fuzzy
 #| msgid "Поиск файлов"
 msgid "Перейти к файлу"
 msgstr "Go to file"
 
+#: templates/files/password_required.html:4
 msgid "Пароль требуется"
 msgstr "Password required"
 
+#: templates/files/password_required.html:35
 msgid "Введите пароль"
 msgstr "Enter password"
 
+#: templates/files/password_required.html:50
 msgid "Открыть файл"
 msgstr "Open file"
 
+#: templates/files/password_required.html:70
 msgid "Этот файл защищен паролем для обеспечения конфиденциальности."
 msgstr "This file is password-protected for privacy."
 
+#: templates/files/password_required.html:71
 msgid "Введите правильный пароль для доступа."
 msgstr "Enter the correct password to access."
 
+#: templates/files/recent_files.html:15
 msgid "Назад"
 msgstr "Back"
 
+#: templates/files/recent_files.html:29
 msgid "Ваши загруженные файлы"
 msgstr "Your uploaded files"
 
+#: templates/files/recent_files.html:31
 msgid "В текущей сессии вы еще не загружали файлы"
 msgstr "You haven't uploaded any files in this session yet"
 
+#: templates/files/recent_files.html:34
 msgid "Для просмотра ваших файлов необходимо загрузить хотя бы один файл"
 msgstr "To view your files, you need to upload at least one file"
 
+#: templates/files/recent_files.html:103 templates/files/search_results.html:95
 msgid "Просмотреть"
 msgstr "View"
 
+#: templates/files/recent_files.html:172
+#, python-format
 msgid "Страница %(current)s из %(total)s (%(count)s файлов всего)"
 msgstr "Page %(current)s of %(total)s (%(count)s files total)"
 
+#: templates/files/recent_files.html:185
 msgid "В текущей сессии вы еще не загружали файлы."
 msgstr "You haven't uploaded any files in this session."
 
+#: templates/files/recent_files.html:196
 #, fuzzy
 #| msgid "Страница не найдена (404)"
 msgid "Сессия не найдена"
 msgstr "Session not found"
 
+#: templates/files/recent_files.html:198
 msgid "Для просмотра ваших файлов необходимо загрузить хотя бы один файл."
 msgstr "To view your files, you need to upload at least one file."
 
+#: templates/files/recent_files.html:199
 msgid "Это создаст анонимную сессию для вас."
 msgstr "This will create an anonymous session for you."
 
+#: templates/files/search_results.html:14
 msgid "Результаты поиска"
 msgstr "Search results"
 
+#: templates/files/search_results.html:17
 #, python-format
 msgid ""
 "По запросу \"<strong>%(q)s</strong>\" найдено %(count)s файлов среди ваших "
@@ -530,985 +709,58 @@ msgstr ""
 "Found %(count)s files for query \"<strong>%(q)s</strong>\" among your "
 "uploaded files"
 
+#: templates/files/search_results.html:41
 msgid "Нет активной сессии"
 msgstr "No active session"
 
+#: templates/files/search_results.html:43
 msgid "Для поиска файлов необходимо загрузить хотя бы один файл."
 msgstr "To search files, you need to upload at least one file."
 
+#: templates/files/search_results.html:44
 #, fuzzy
 #| msgid "Поиск среди ваших файлов..."
 msgid "Поиск доступен только среди ваших собственных файлов."
 msgstr "Search is available only among your own files."
 
+#: templates/files/search_results.html:85
 msgid "Осталось"
 msgstr "Remaining"
 
+#: templates/files/search_results.html:118
 #, fuzzy
 #| msgid "Поиск по файлам"
 msgid "Навигация по страницам"
 msgstr "Page navigation"
 
+#: templates/files/search_results.html:155
 #, fuzzy
 #| msgid "Страница не найдена (404)"
-msgid "No files found"
-msgstr "No files found"
+msgid "Файлы не найдены"
+msgstr "Session not found"
 
+#: templates/files/search_results.html:157
 #, python-format
 msgid ""
 "По запросу \"<strong>%(q)s</strong>\" среди ваших файлов ничего не найдено."
 msgstr ""
 
+#: templates/files/search_results.html:158
 msgid ""
 "Попробуйте изменить поисковый запрос или проверьте правильность написания."
 msgstr ""
 
-msgid "Messages"
-msgstr ""
-
-msgid "Site Maps"
-msgstr ""
-
-msgid "Static Files"
-msgstr ""
-
-msgid "Syndication"
-msgstr ""
-
-#. Translators: String used to replace omitted page numbers in elided page
-#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
-msgid "…"
-msgstr ""
-
-msgid "That page number is not an integer"
-msgstr ""
-
-msgid "That page number is less than 1"
-msgstr ""
-
-msgid "That page contains no results"
-msgstr ""
-
-msgid "Enter a valid value."
-msgstr ""
-
-msgid "Enter a valid domain name."
-msgstr ""
-
-msgid "Enter a valid URL."
-msgstr ""
-
-msgid "Enter a valid integer."
-msgstr ""
-
-msgid "Enter a valid email address."
-msgstr ""
-
-#. Translators: "letters" means latin letters: a-z and A-Z.
-msgid ""
-"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
-msgstr ""
-
-msgid ""
-"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
-"hyphens."
-msgstr ""
-
-#, python-format
-msgid "Enter a valid %(protocol)s address."
-msgstr ""
-
-msgid "IPv4"
-msgstr ""
-
-msgid "IPv6"
-msgstr ""
-
-msgid "IPv4 or IPv6"
-msgstr ""
-
-msgid "Enter only digits separated by commas."
-msgstr ""
-
-#, python-format
-msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-msgstr ""
-
-#, python-format
-msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr ""
-
-#, python-format
-msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
-
-#, python-format
-msgid "Ensure this value is a multiple of step size %(limit_value)s."
-msgstr ""
-
-#, python-format
-msgid ""
-"Ensure this value is a multiple of step size %(limit_value)s, starting from "
-"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
-msgstr ""
-
-#, python-format
-msgid ""
-"Ensure this value has at least %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at least %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid ""
-"Ensure this value has at most %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at most %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Enter a number."
-msgstr ""
-
-#, python-format
-msgid "Ensure that there are no more than %(max)s digit in total."
-msgid_plural "Ensure that there are no more than %(max)s digits in total."
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "Ensure that there are no more than %(max)s decimal place."
-msgid_plural "Ensure that there are no more than %(max)s decimal places."
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid ""
-"Ensure that there are no more than %(max)s digit before the decimal point."
-msgid_plural ""
-"Ensure that there are no more than %(max)s digits before the decimal point."
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid ""
-"File extension “%(extension)s” is not allowed. Allowed extensions are: "
-"%(allowed_extensions)s."
-msgstr ""
-
-msgid "Null characters are not allowed."
-msgstr ""
-
-msgid "and"
-msgstr ""
-
-#, python-format
-msgid "%(model_name)s with this %(field_labels)s already exists."
-msgstr ""
-
-#, python-format
-msgid "Constraint “%(name)s” is violated."
-msgstr ""
-
-#, python-format
-msgid "Value %(value)r is not a valid choice."
-msgstr ""
-
-msgid "This field cannot be null."
-msgstr ""
-
-msgid "This field cannot be blank."
-msgstr ""
-
-#, python-format
-msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr ""
-
-#. Translators: The 'lookup_type' is one of 'date', 'year' or
-#. 'month'. Eg: "Title must be unique for pub_date year"
-#, python-format
-msgid ""
-"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
-msgstr ""
-
-#, python-format
-msgid "Field of type: %(field_type)s"
-msgstr ""
-
-#, python-format
-msgid "“%(value)s” value must be either True or False."
-msgstr ""
-
-#, python-format
-msgid "“%(value)s” value must be either True, False, or None."
-msgstr ""
-
-msgid "Boolean (Either True or False)"
-msgstr ""
-
-#, python-format
-msgid "String (up to %(max_length)s)"
-msgstr ""
-
-msgid "String (unlimited)"
-msgstr ""
-
-msgid "Comma-separated integers"
-msgstr ""
-
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
-"format."
-msgstr ""
-
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
-"date."
-msgstr ""
-
-msgid "Date (without time)"
-msgstr ""
-
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
-"uuuuuu]][TZ] format."
-msgstr ""
-
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-"[TZ]) but it is an invalid date/time."
-msgstr ""
-
-msgid "Date (with time)"
-msgstr ""
-
-#, python-format
-msgid "“%(value)s” value must be a decimal number."
-msgstr ""
-
-msgid "Decimal number"
-msgstr ""
-
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
-"uuuuuu] format."
-msgstr ""
-
-msgid "Duration"
-msgstr ""
-
-msgid "Email address"
-msgstr ""
-
-msgid "File path"
-msgstr ""
-
-#, python-format
-msgid "“%(value)s” value must be a float."
-msgstr ""
-
-msgid "Floating point number"
-msgstr ""
-
-#, python-format
-msgid "“%(value)s” value must be an integer."
-msgstr ""
-
-msgid "Integer"
-msgstr ""
-
-msgid "Big (8 byte) integer"
-msgstr ""
-
-msgid "Small integer"
-msgstr ""
-
-msgid "IPv4 address"
-msgstr ""
-
-msgid "IP address"
-msgstr ""
-
-#, python-format
-msgid "“%(value)s” value must be either None, True or False."
-msgstr ""
-
-msgid "Boolean (Either True, False or None)"
-msgstr ""
-
-msgid "Positive big integer"
-msgstr ""
-
-msgid "Positive integer"
-msgstr ""
-
-msgid "Positive small integer"
-msgstr ""
-
-#, python-format
-msgid "Slug (up to %(max_length)s)"
-msgstr ""
-
-msgid "Text"
-msgstr ""
-
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
-"format."
-msgstr ""
-
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
-"invalid time."
-msgstr ""
-
-msgid "Time"
-msgstr ""
-
-msgid "URL"
-msgstr ""
-
-msgid "Raw binary data"
-msgstr ""
-
-#, python-format
-msgid "“%(value)s” is not a valid UUID."
-msgstr ""
-
-msgid "Universally unique identifier"
-msgstr ""
-
-msgid "File"
-msgstr ""
-
-msgid "Image"
-msgstr ""
-
-msgid "A JSON object"
-msgstr ""
-
-msgid "Value must be valid JSON."
-msgstr ""
-
-#, python-format
-msgid "%(model)s instance with %(field)s %(value)r is not a valid choice."
-msgstr ""
-
-msgid "Foreign Key (type determined by related field)"
-msgstr ""
-
-msgid "One-to-one relationship"
-msgstr ""
-
-#, python-format
-msgid "%(from)s-%(to)s relationship"
-msgstr ""
-
-#, python-format
-msgid "%(from)s-%(to)s relationships"
-msgstr ""
-
-msgid "Many-to-many relationship"
-msgstr ""
-
-#. Translators: If found as last label character, these punctuation
-#. characters will prevent the default label_suffix to be appended to the label
-msgid ":?.!"
-msgstr ""
-
-msgid "This field is required."
-msgstr ""
-
-msgid "Enter a whole number."
-msgstr ""
-
-msgid "Enter a valid date."
-msgstr ""
-
-msgid "Enter a valid time."
-msgstr ""
-
-msgid "Enter a valid date/time."
-msgstr ""
-
-msgid "Enter a valid duration."
-msgstr ""
-
-#, python-brace-format
-msgid "The number of days must be between {min_days} and {max_days}."
-msgstr ""
-
-msgid "No file was submitted. Check the encoding type on the form."
-msgstr ""
-
-msgid "No file was submitted."
-msgstr ""
-
-msgid "The submitted file is empty."
-msgstr ""
-
-#, python-format
-msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
-msgid_plural ""
-"Ensure this filename has at most %(max)d characters (it has %(length)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Please either submit a file or check the clear checkbox, not both."
-msgstr ""
-
-msgid ""
-"Upload a valid image. The file you uploaded was either not an image or a "
-"corrupted image."
-msgstr ""
-
-#, python-format
-msgid "Select a valid choice. %(value)s is not one of the available choices."
-msgstr ""
-
-msgid "Enter a list of values."
-msgstr ""
-
-msgid "Enter a complete value."
-msgstr ""
-
-msgid "Enter a valid UUID."
-msgstr ""
-
-msgid "Enter a valid JSON."
-msgstr ""
-
-#. Translators: This is the default suffix added to form field labels
-msgid ":"
-msgstr ""
-
-#, python-format
-msgid "(Hidden field %(name)s) %(error)s"
-msgstr ""
-
-#, python-format
-msgid ""
-"ManagementForm data is missing or has been tampered with. Missing fields: "
-"%(field_names)s. You may need to file a bug report if the issue persists."
-msgstr ""
-
-#, python-format
-msgid "Please submit at most %(num)d form."
-msgid_plural "Please submit at most %(num)d forms."
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "Please submit at least %(num)d form."
-msgid_plural "Please submit at least %(num)d forms."
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Order"
-msgstr ""
-
-msgid "Delete"
-msgstr ""
-
-#, python-format
-msgid "Please correct the duplicate data for %(field)s."
-msgstr ""
-
-#, python-format
-msgid "Please correct the duplicate data for %(field)s, which must be unique."
-msgstr ""
-
-#, python-format
-msgid ""
-"Please correct the duplicate data for %(field_name)s which must be unique "
-"for the %(lookup)s in %(date_field)s."
-msgstr ""
-
-msgid "Please correct the duplicate values below."
-msgstr ""
-
-msgid "The inline value did not match the parent instance."
-msgstr ""
-
-msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr ""
-
-#, python-format
-msgid "“%(pk)s” is not a valid value."
-msgstr ""
-
-#, python-format
-msgid ""
-"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
-"may be ambiguous or it may not exist."
-msgstr ""
-
-msgid "Clear"
-msgstr ""
-
-msgid "Currently"
-msgstr ""
-
-msgid "Change"
-msgstr ""
-
-msgid "Unknown"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-#. Translators: Please do not add spaces around commas.
-msgid "yes,no,maybe"
-msgstr ""
-
-#, python-format
-msgid "%(size)d byte"
-msgid_plural "%(size)d bytes"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "%s KB"
-msgstr ""
-
-#, python-format
-msgid "%s MB"
-msgstr ""
-
-#, python-format
-msgid "%s GB"
-msgstr ""
-
-#, python-format
-msgid "%s TB"
-msgstr ""
-
-#, python-format
-msgid "%s PB"
-msgstr ""
-
-msgid "p.m."
-msgstr ""
-
-msgid "a.m."
-msgstr ""
-
-msgid "PM"
-msgstr ""
-
-msgid "AM"
-msgstr ""
-
-msgid "midnight"
-msgstr ""
-
-msgid "noon"
-msgstr ""
-
-msgid "Monday"
-msgstr ""
-
-msgid "Tuesday"
-msgstr ""
-
-msgid "Wednesday"
-msgstr ""
-
-msgid "Thursday"
-msgstr ""
-
-msgid "Friday"
-msgstr ""
-
-msgid "Saturday"
-msgstr ""
-
-msgid "Sunday"
-msgstr ""
-
-msgid "Mon"
-msgstr ""
-
-msgid "Tue"
-msgstr ""
-
-msgid "Wed"
-msgstr ""
-
-msgid "Thu"
-msgstr ""
-
-msgid "Fri"
-msgstr ""
-
-msgid "Sat"
-msgstr ""
-
-msgid "Sun"
-msgstr ""
-
-msgid "January"
-msgstr ""
-
-msgid "February"
-msgstr ""
-
-msgid "March"
-msgstr ""
-
-msgid "April"
-msgstr ""
-
-msgid "May"
-msgstr ""
-
-msgid "June"
-msgstr ""
-
-msgid "July"
-msgstr ""
-
-msgid "August"
-msgstr ""
-
-msgid "September"
-msgstr ""
-
-msgid "October"
-msgstr ""
-
-msgid "November"
-msgstr ""
-
-msgid "December"
-msgstr ""
-
-msgid "jan"
-msgstr ""
-
-msgid "feb"
-msgstr ""
-
-msgid "mar"
-msgstr ""
-
-msgid "apr"
-msgstr ""
-
-msgid "may"
-msgstr ""
-
-msgid "jun"
-msgstr ""
-
-msgid "jul"
-msgstr ""
-
-msgid "aug"
-msgstr ""
-
-msgid "sep"
-msgstr ""
-
-msgid "oct"
-msgstr ""
-
-msgid "nov"
-msgstr ""
-
-msgid "dec"
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "Jan."
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "Feb."
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "March"
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "April"
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "May"
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "June"
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "July"
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "Aug."
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "Sept."
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "Oct."
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "Nov."
-msgstr ""
-
-msgctxt "abbrev. month"
-msgid "Dec."
-msgstr ""
-
-msgctxt "alt. month"
-msgid "January"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "February"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "March"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "April"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "May"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "June"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "July"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "August"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "September"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "October"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "November"
-msgstr ""
-
-msgctxt "alt. month"
-msgid "December"
-msgstr ""
-
-msgid "This is not a valid IPv6 address."
-msgstr ""
-
-#, python-format
-msgctxt "String to return when truncating text"
-msgid "%(truncated_text)s…"
-msgstr ""
-
-msgid "or"
-msgstr ""
-
-#. Translators: This string is used as a separator between list elements
-msgid ", "
-msgstr ""
-
-#, python-format
-msgid "%(num)d year"
-msgid_plural "%(num)d years"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "%(num)d month"
-msgid_plural "%(num)d months"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "%(num)d week"
-msgid_plural "%(num)d weeks"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "%(num)d day"
-msgid_plural "%(num)d days"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "%(num)d hour"
-msgid_plural "%(num)d hours"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-format
-msgid "%(num)d minute"
-msgid_plural "%(num)d minutes"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Forbidden"
-msgstr ""
-
-msgid "CSRF verification failed. Request aborted."
-msgstr ""
-
-msgid ""
-"You are seeing this message because this HTTPS site requires a “Referer "
-"header” to be sent by your web browser, but none was sent. This header is "
-"required for security reasons, to ensure that your browser is not being "
-"hijacked by third parties."
-msgstr ""
-
-msgid ""
-"If you have configured your browser to disable “Referer” headers, please re-"
-"enable them, at least for this site, or for HTTPS connections, or for “same-"
-"origin” requests."
-msgstr ""
-
-msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the “Referrer-Policy: no-referrer” header, please remove them. The "
-"CSRF protection requires the “Referer” header to do strict referer checking. "
-"If you’re concerned about privacy, use alternatives like <a "
-"rel=\"noreferrer\" …> for links to third-party sites."
-msgstr ""
-
-msgid ""
-"You are seeing this message because this site requires a CSRF cookie when "
-"submitting forms. This cookie is required for security reasons, to ensure "
-"that your browser is not being hijacked by third parties."
-msgstr ""
-
-msgid ""
-"If you have configured your browser to disable cookies, please re-enable "
-"them, at least for this site, or for “same-origin” requests."
-msgstr ""
-
-msgid "More information is available with DEBUG=True."
-msgstr ""
-
-msgid "No year specified"
-msgstr ""
-
-msgid "Date out of range"
-msgstr ""
-
-msgid "No month specified"
-msgstr ""
-
-msgid "No day specified"
-msgstr ""
-
-msgid "No week specified"
-msgstr ""
-
-#, python-format
-msgid "No %(verbose_name_plural)s available"
-msgstr ""
-
-#, python-format
-msgid ""
-"Future %(verbose_name_plural)s not available because %(class_name)s."
-"allow_future is False."
-msgstr ""
-
-#, python-format
-msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
-msgstr ""
-
-#, python-format
-msgid "No %(verbose_name)s found matching the query"
-msgstr ""
-
-msgid "Page is not “last”, nor can it be converted to an int."
-msgstr ""
-
-#, python-format
-msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr ""
-
-#, python-format
-msgid "Empty list and “%(class_name)s.allow_empty” is False."
-msgstr ""
-
-msgid "Directory indexes are not allowed here."
-msgstr ""
-
-#, python-format
-msgid "“%(path)s” does not exist"
-msgstr ""
-
-#, python-format
-msgid "Index of %(directory)s"
-msgstr ""
-
-msgid "The install worked successfully! Congratulations!"
-msgstr ""
-
-#, python-format
-msgid ""
-"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
-"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
-msgstr ""
-
-#, python-format
-msgid ""
-"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" "
-"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
-"configured any URLs."
-msgstr ""
-
-msgid "Django Documentation"
-msgstr ""
-
-msgid "Topics, references, &amp; how-to’s"
-msgstr ""
-
-msgid "Tutorial: A Polling App"
-msgstr ""
-
-msgid "Get started with Django"
-msgstr ""
-
-msgid "Django Community"
-msgstr ""
-
-msgid "Connect, get help, or contribute"
-msgstr ""
+#~ msgid "Код занят"
+#~ msgstr "Code taken"
+
+#~ msgid "Код доступен"
+#~ msgstr "Code available"
+
+#~ msgid ""
+#~ "Любые символы, до 50 знаков. Оставьте пустым для автоматической генерации."
+#~ msgstr "Any characters, up to 50 chars. Leave empty for auto-generation."
+
+#, fuzzy
+#~| msgid "Страница не найдена (404)"
+#~ msgid "No files found"
+#~ msgstr "No files found"

@@ -42,6 +42,13 @@ class File(models.Model):
     # Флаг удаления (для подсчета всех загруженных файлов)
     is_deleted = models.BooleanField(default=False, verbose_name='Файл удален')
     
+    # Флаг постоянного файла (никогда не удаляется)
+    is_permanent = models.BooleanField(default=False, verbose_name='Постоянный файл')
+    
+    # Сжатая версия PDF для быстрого отображения
+    compressed_pdf = models.FileField(upload_to='compressed_pdfs/', blank=True, null=True, verbose_name='Сжатый PDF')
+    compressed_pdf_size = models.BigIntegerField(blank=True, null=True, verbose_name='Размер сжатого PDF (байт)')
+    
     class Meta:
         verbose_name = 'Файл'
         verbose_name_plural = 'Файлы'
@@ -101,6 +108,9 @@ class File(models.Model):
     
     def is_expired(self):
         """Проверяет, истек ли срок действия файла"""
+        # Постоянные файлы никогда не истекают
+        if self.is_permanent:
+            return False
         return timezone.now() > self.expires_at
     
     def increment_download_count(self):
@@ -179,6 +189,29 @@ class File(models.Model):
         
         return name_map.get(file_type, 'Файл')
     
+    def get_compressed_pdf_size_mb(self):
+        """Возвращает размер сжатого PDF в мегабайтах"""
+        if self.compressed_pdf_size:
+            return round(self.compressed_pdf_size / (1024 * 1024), 2)
+        return 0
+    
+    def has_compressed_pdf(self):
+        """Проверяет, есть ли сжатая версия PDF"""
+        return bool(self.compressed_pdf and self.compressed_pdf_size)
+    
+    def get_compression_ratio(self):
+        """Возвращает коэффициент сжатия в процентах"""
+        if not self.has_compressed_pdf() or not self.file_size:
+            return 0
+        
+        original_size = self.file_size
+        compressed_size = self.compressed_pdf_size
+        
+        if compressed_size >= original_size:
+            return 0
+        
+        return round((1 - compressed_size / original_size) * 100, 1)
+    
     def get_file_type_color(self):
         """Возвращает цвет для типа файла (Bootstrap классы)"""
         file_type = self.get_file_type()
@@ -213,16 +246,41 @@ class File(models.Model):
             return f"{minutes}м"
     
     def delete(self, *args, **kwargs):
-        """Удаляет физический файл при удалении записи"""
+        """Удаляет физический файл и запись из базы данных"""
+        # Постоянные файлы не удаляются
+        if self.is_permanent:
+            return
+        
+        # Удаляем физические файлы
         if self.file:
-            if os.path.isfile(self.file.path):
-                os.remove(self.file.path)
+            try:
+                if os.path.isfile(self.file.path):
+                    os.remove(self.file.path)
+            except (OSError, IOError) as e:
+                # Логируем ошибку, но не прерываем удаление
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(f"Не удалось удалить файл {self.file.path}: {e}")
+        
         if self.qr_code:
-            if os.path.isfile(self.qr_code.path):
-                os.remove(self.qr_code.path)
+            try:
+                if os.path.isfile(self.qr_code.path):
+                    os.remove(self.qr_code.path)
+            except (OSError, IOError) as e:
+                # Логируем ошибку, но не прерываем удаление
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(f"Не удалось удалить QR код {self.qr_code.path}: {e}")
         
-        # Вместо удаления записи помечаем как удаленную
-        self.is_deleted = True
-        self.save()
+        if self.compressed_pdf:
+            try:
+                if os.path.isfile(self.compressed_pdf.path):
+                    os.remove(self.compressed_pdf.path)
+            except (OSError, IOError) as e:
+                # Логируем ошибку, но не прерываем удаление
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(f"Не удалось удалить сжатый PDF {self.compressed_pdf.path}: {e}")
         
-        # Не вызываем super().delete() - сохраняем запись для статистики
+        # Полностью удаляем запись из базы данных для освобождения кода
+        super().delete(*args, **kwargs)

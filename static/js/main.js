@@ -55,10 +55,10 @@ class MaterialFileUploader {
         }
 
         // Обработчики для кнопок копирования ссылок
-        this.setupCopyButtons();
+        // this.setupCopyButtons(); // Убираем этот вызов, так как метод находится в другом классе
         
         // Обработчик для проверки уникальности кода
-        this.setupCodeValidation();
+        // this.setupCodeValidation(); // Убираем этот вызов, так как метод находится в другом классе
 
         // Обработчик для drag and drop
         document.addEventListener('dragover', (e) => e.preventDefault());
@@ -780,6 +780,7 @@ class AnonymousSessionManager {
     init() {
         this.checkSessionStatus();
         this.setupSessionInfo();
+        this.setupCodeValidation();
     }
 
     checkSessionStatus() {
@@ -795,7 +796,7 @@ class AnonymousSessionManager {
 
     setupSessionInfo() {
         // Создаем индикатор сессии в навигации
-        this.createSessionIndicator();
+        // this.createSessionIndicator(); // Убрано по запросу пользователя
         
         // Добавляем обработчик для очистки сессии
         this.setupSessionControls();
@@ -926,6 +927,21 @@ class AnonymousSessionManager {
         document.body.removeChild(textArea);
     }
     
+    // Метод для настройки кнопок копирования
+    setupCopyButtons() {
+        // Находим все кнопки копирования ссылок
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.copy-link-btn')) {
+                const button = e.target.closest('.copy-link-btn');
+                const url = button.getAttribute('data-url');
+                if (url) {
+                    // Используем глобальную функцию вместо this.copyToClipboard
+                    copyToClipboard(url, button);
+                }
+            }
+        });
+    }
+    
     // Метод для настройки валидации кода
     setupCodeValidation() {
         const customCodeInput = document.getElementById('customCode');
@@ -994,27 +1010,13 @@ class AnonymousSessionManager {
         }
     }
     
-    // Метод для настройки кнопок копирования
-    setupCopyButtons() {
-        // Находим все кнопки копирования ссылок
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.copy-link-btn')) {
-                const button = e.target.closest('.copy-link-btn');
-                const url = button.getAttribute('data-url');
-                if (url) {
-                    // Используем глобальную функцию вместо this.copyToClipboard
-                    copyToClipboard(url, button);
-                }
-            }
-        });
-    }
-    
     // Метод для проверки уникальности кода
     async checkCodeAvailability(code) {
         if (!code || code.length < 1) return true;
         
         try {
-            const response = await fetch(`/files/check-code/?code=${encodeURIComponent(code)}`, {
+            const url = `/api/check-code/?code=${encodeURIComponent(code)}`;
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
@@ -1032,7 +1034,54 @@ class AnonymousSessionManager {
         return true; // По умолчанию считаем доступным
     }
     
-
+    // Метод для показа popover о занятом коде
+    showCodeOccupiedPopover(inputElement, message) {
+        // Убираем существующий popover
+        const existingPopover = document.querySelector('.code-occupied-popover');
+        if (existingPopover) {
+            existingPopover.remove();
+        }
+        
+        // Создаем popover
+        const popover = document.createElement('div');
+        popover.className = 'code-occupied-popover';
+        popover.innerHTML = `
+            <div class="popover-content">
+                <div class="popover-header">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    <span>Код уже занят</span>
+                </div>
+                <div class="popover-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        
+        // Позиционируем popover
+        const rect = inputElement.getBoundingClientRect();
+        popover.style.position = 'absolute';
+        popover.style.top = `${rect.bottom + 5}px`;
+        popover.style.left = `${rect.left}px`;
+        popover.style.zIndex = '9999';
+        
+        // Добавляем в DOM
+        document.body.appendChild(popover);
+        
+        // Автоматически скрываем через 5 секунд
+        setTimeout(() => {
+            if (popover.parentNode) {
+                popover.remove();
+            }
+        }, 5000);
+        
+        // Скрываем при клике вне popover
+        document.addEventListener('click', function hidePopover(e) {
+            if (!popover.contains(e.target) && e.target !== inputElement) {
+                popover.remove();
+                document.removeEventListener('click', hidePopover);
+            }
+        });
+    }
     
     // Метод для обновления списка недавних файлов
     async updateRecentFiles() {

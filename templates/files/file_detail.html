@@ -51,7 +51,17 @@
                                     </div>
                                     <div class="detail-content">
                                         <div class="detail-label">{% trans 'Размер' %}</div>
-                                        <div class="detail-value">{{ file.get_file_size_mb }} МБ</div>
+                                        <div class="detail-value">
+                                            {{ file.get_file_size_mb }} МБ
+                                            {% if file.has_compressed_pdf %}
+                                                <br>
+                                                <small class="text-success">
+                                                    <i class="fas fa-compress-alt me-1"></i>
+                                                    {% trans 'Сжатая версия:' %} {{ file.get_compressed_pdf_size_mb }} МБ
+                                                    <span class="badge bg-success ms-1">{{ file.get_compression_ratio }}%</span>
+                                                </small>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -120,10 +130,22 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <a href="{% url 'files:view_file' file.code %}"
-                                           class="btn btn-outline-primary btn-lg w-100">
+                                           class="btn btn-outline-primary btn-lg w-100 preview-btn"
+                                           data-file-type="{{ file.get_file_type }}"
+                                           data-file-ext="{{ file.filename|slice:'-4:'|lower }}">
                                             <i class="fas fa-eye me-2"></i>
-                                            {% trans 'Просмотр' %}
+                                            <span class="preview-text">{% trans 'Просмотр' %}</span>
+                                            <span class="preview-status" style="display: none;">
+                                                <i class="fas fa-spinner fa-spin me-1"></i>
+                                                {% trans 'Проверка...' %}
+                                            </span>
                                         </a>
+                                        <div class="preview-info mt-2" style="display: none;">
+                                            <small class="text-muted">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                <span class="preview-info-text"></span>
+                                            </small>
+                                        </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <a href="{% url 'files:edit_file' file.code %}" 
@@ -330,7 +352,88 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('copyToClipboard доступна:', typeof copyToClipboard !== 'undefined');
     console.log('showNotification доступна:', typeof showNotification !== 'undefined');
     console.log('setupGlobalCopyButtons доступна:', typeof setupGlobalCopyButtons !== 'undefined');
+    
+    // Инициализируем проверку предпросмотра
+    initializePreviewSupport();
 });
+
+// Функция для проверки поддержки предпросмотра
+async function initializePreviewSupport() {
+    const previewBtn = document.querySelector('.preview-btn');
+    if (!previewBtn) return;
+    
+    const fileType = previewBtn.getAttribute('data-file-type');
+    const fileExt = previewBtn.getAttribute('data-file-ext');
+    const previewText = previewBtn.querySelector('.preview-text');
+    const previewStatus = previewBtn.querySelector('.preview-status');
+    const previewInfo = previewBtn.parentElement.querySelector('.preview-info');
+    const previewInfoText = previewInfo.querySelector('.preview-info-text');
+    
+    // Показываем статус проверки
+    previewText.style.display = 'none';
+    previewStatus.style.display = 'inline';
+    
+    try {
+        // Проверяем поддержку предпросмотра на сервере
+        const response = await fetch('/api/preview-support/');
+        const data = await response.json();
+        
+        // Определяем, поддерживается ли предпросмотр для данного типа файла
+        let isSupported = false;
+        let supportInfo = '';
+        
+        if (fileType === 'image' || fileExt === '.pdf') {
+            isSupported = true;
+            supportInfo = 'Предпросмотр поддерживается браузером';
+        } else if (fileType === 'document' || fileType === 'spreadsheet' || fileType === 'presentation') {
+            if (data.libreoffice_available) {
+                isSupported = true;
+                supportInfo = 'Предпросмотр через LibreOffice (конвертация в PDF)';
+            } else {
+                isSupported = false;
+                supportInfo = 'LibreOffice не установлен на сервере';
+            }
+        } else if (fileType === 'code' || fileExt === '.txt' || fileExt === '.csv') {
+            isSupported = true;
+            supportInfo = 'Предпросмотр текстового файла';
+        } else {
+            isSupported = false;
+            supportInfo = 'Предпросмотр не поддерживается для данного типа файла';
+        }
+        
+        // Обновляем кнопку и информацию
+        previewText.style.display = 'inline';
+        previewStatus.style.display = 'none';
+        
+        if (isSupported) {
+            previewBtn.classList.remove('btn-outline-secondary');
+            previewBtn.classList.add('btn-outline-primary');
+            previewInfoText.textContent = supportInfo;
+            previewInfo.style.display = 'block';
+        } else {
+            previewBtn.classList.remove('btn-outline-primary');
+            previewBtn.classList.add('btn-outline-secondary');
+            previewInfoText.textContent = supportInfo;
+            previewInfo.style.display = 'block';
+            
+            // Добавляем предупреждение
+            previewBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Предпросмотр не поддерживается для данного типа файла. Файл будет скачан.');
+                window.location.href = previewBtn.href.replace('/view/', '/download/');
+            });
+        }
+        
+    } catch (error) {
+        console.error('Ошибка проверки поддержки предпросмотра:', error);
+        previewText.style.display = 'inline';
+        previewStatus.style.display = 'none';
+        previewBtn.classList.remove('btn-outline-primary');
+        previewBtn.classList.add('btn-outline-secondary');
+        previewInfoText.textContent = 'Не удалось проверить поддержку предпросмотра';
+        previewInfo.style.display = 'block';
+    }
+}
 
 // Показать/скрыть отладочную секцию по нажатию Ctrl+Shift+D
 document.addEventListener('keydown', (e) => {

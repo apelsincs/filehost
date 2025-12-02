@@ -14,6 +14,7 @@ from django_ratelimit.decorators import ratelimit
 from django.contrib.sitemaps import Sitemap
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.cache import cache
+from django.core.files.base import ContentFile
 import random
 import string
 from datetime import timedelta
@@ -24,6 +25,7 @@ import mimetypes
 
 from .models import File
 from .forms import FileUploadForm, PasswordForm, FileEditForm
+from .pdf_utils import compress_pdf, should_compress_pdf
 
 
 def generate_unique_code():
@@ -89,6 +91,45 @@ def home(request):
             
             # Сохраняем файл
             file_instance.save()
+            
+            # Если это PDF файл, пытаемся сжать его
+            if file_instance.filename.lower().endswith('.pdf'):
+                try:
+                    if should_compress_pdf(file_instance.file.path, max_size_mb=10):
+                        success, compressed_path, compressed_size = compress_pdf(
+                            file_instance.file.path,
+                            quality=75,
+                            max_size_mb=10
+                        )
+                        
+                        if success and compressed_path and compressed_size:
+                            # Сохраняем сжатую версию
+                            with open(compressed_path, 'rb') as f:
+                                file_instance.compressed_pdf.save(
+                                    f"compressed_{file_instance.filename}",
+                                    ContentFile(f.read()),
+                                    save=True
+                                )
+                            
+                            file_instance.compressed_pdf_size = compressed_size
+                            file_instance.save(update_fields=['compressed_pdf', 'compressed_pdf_size'])
+                            
+                            # Удаляем временный файл
+                            if compressed_path != file_instance.file.path:
+                                os.remove(compressed_path)
+                            
+                            # Логируем успешное сжатие
+                            import logging
+                            logger = logging.getLogger(__name__)
+                            original_mb = file_instance.file_size / (1024 * 1024)
+                            compressed_mb = compressed_size / (1024 * 1024)
+                            ratio = (1 - compressed_size / file_instance.file_size) * 100
+                            logger.info(f"PDF сжат: {file_instance.code} - {original_mb:.1f}MB → {compressed_mb:.1f}MB ({ratio:.1f}%)")
+                except Exception as e:
+                    # Логируем ошибку, но не прерываем загрузку
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.warning(f"Не удалось сжать PDF {file_instance.code}: {str(e)}")
             
             # Возвращаем JSON ответ для показа модального окна
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -190,14 +231,17 @@ def file_detail(request, code):
     """
     Страница просмотра файла по коду.
     """
-    file_instance = get_object_or_404(File, code=code.upper())
+    # Нормализуем код (верхний регистр, убираем пробелы)
+    code = code.upper().strip()
+    
+    file_instance = get_object_or_404(File, code=code)
     
     # Проверяем, не удален ли файл
     if file_instance.is_deleted:
         raise Http404("Файл не найден")
     
-    # Проверяем, не истек ли файл
-    if file_instance.is_expired():
+    # Проверяем, не истек ли файл (постоянные файлы никогда не истекают)
+    if not file_instance.is_permanent and file_instance.is_expired():
         messages.error(request, _('Файл истек и больше недоступен.'))
         return redirect('files:home')
     
@@ -247,8 +291,8 @@ def download_file(request, code):
     if file_instance.is_deleted:
         raise Http404("Файл не найден")
     
-    # Проверяем, не истек ли файл
-    if file_instance.is_expired():
+    # Проверяем, не истек ли файл (постоянные файлы никогда не истекают)
+    if not file_instance.is_permanent and file_instance.is_expired():
         raise Http404("Файл истек")
     
     # Если файл защищен паролем, проверяем пароль/авторизацию
@@ -288,7 +332,7 @@ def view_file(request, code):
     # Базовые проверки
     if file_instance.is_deleted:
         raise Http404(_('Файл не найден'))
-    if file_instance.is_expired():
+    if not file_instance.is_permanent and file_instance.is_expired():
         raise Http404(_('Файл истек'))
 
     # Защита паролем
@@ -301,13 +345,49 @@ def view_file(request, code):
     # Определяем стратегию предпросмотра
     _, ext = os.path.splitext(file_instance.filename.lower())
     doc_like_exts = {'.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.odt', '.ods', '.odp'}
+    image_exts = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.svg', '.ico'}
+    text_exts = {'.txt', '.csv', '.log', '.md', '.json', '.xml', '.html', '.css', '.js', '.py', '.php', '.java', '.cpp', '.c', '.h'}
 
     # Для PDF и изображений — отдаём как есть inline
-    if ext in {'.pdf', '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp', '.svg'}:
-        file_stream = file_instance.file.open('rb')
-        response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
-        response['Content-Length'] = file_instance.file_size
+    if ext == '.pdf' or ext in image_exts:
+        # Для PDF используем сжатую версию, если она есть
+        if ext == '.pdf' and file_instance.has_compressed_pdf():
+            file_stream = file_instance.compressed_pdf.open('rb')
+            response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
+            response['Content-Length'] = file_instance.compressed_pdf_size
+            response['Content-Type'] = 'application/pdf'
+            # Добавляем заголовок, указывающий что это сжатая версия
+            response['X-Compressed-PDF'] = 'true'
+            response['X-Original-Size'] = str(file_instance.file_size)
+            response['X-Compressed-Size'] = str(file_instance.compressed_pdf_size)
+        else:
+            file_stream = file_instance.file.open('rb')
+            response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
+            response['Content-Length'] = file_instance.file_size
+            if ext == '.pdf':
+                response['Content-Type'] = 'application/pdf'
         return response
+
+    # Для текстовых файлов — показываем как plain text
+    if ext in text_exts:
+        try:
+            file_stream = file_instance.file.open('r', encoding='utf-8')
+            content = file_stream.read()
+            file_stream.close()
+            
+            # Ограничиваем размер для предпросмотра (1MB)
+            if len(content) > 1024 * 1024:
+                content = content[:1024 * 1024] + "\n\n... (файл обрезан, размер превышает 1MB)"
+            
+            response = HttpResponse(content, content_type='text/plain; charset=utf-8')
+            response['Content-Disposition'] = f'inline; filename="{file_instance.filename}"'
+            return response
+        except UnicodeDecodeError:
+            # Если не удается декодировать как UTF-8, отдаем как бинарный
+            file_stream = file_instance.file.open('rb')
+            response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
+            response['Content-Type'] = 'application/octet-stream'
+            return response
 
     # Для офисных форматов — пробуем конвертировать в PDF (кэшируем)
     if ext in doc_like_exts:
@@ -346,6 +426,7 @@ def view_file(request, code):
         if os.path.exists(preview_pdf_path):
             preview_stream = open(preview_pdf_path, 'rb')
             response = FileResponse(preview_stream, as_attachment=False, filename=os.path.basename(preview_pdf_path))
+            response['Content-Type'] = 'application/pdf'
             try:
                 response['Content-Length'] = os.path.getsize(preview_pdf_path)
             except Exception:
@@ -468,24 +549,40 @@ def check_code_availability(request):
     })
 
 
+def check_preview_support(request):
+    """
+    Проверка поддержки предпросмотра файлов на сервере.
+    """
+    libreoffice_available = bool(shutil.which('libreoffice') or shutil.which('soffice'))
+    
+    return JsonResponse({
+        'libreoffice_available': libreoffice_available,
+        'supported_formats': {
+            'office': ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'ods', 'odp'],
+            'images': ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'svg', 'ico'],
+            'text': ['txt', 'csv', 'log', 'md', 'json', 'xml', 'html', 'css', 'js', 'py', 'php', 'java', 'cpp', 'c', 'h'],
+            'pdf': ['pdf']
+        }
+    })
+
+
 def direct_pdf_view(request, code):
     """
     Прямой просмотр PDF файла по коду (например, /5711).
     Если файл не PDF или защищен паролем, перенаправляет на детальную страницу.
     """
-    try:
-        file_instance = get_object_or_404(File, code=code.upper())
-    except Http404:
-        # Если файл не найден, показываем 404
-        raise Http404(_('Файл не найден'))
+    # Нормализуем код (верхний регистр, убираем пробелы)
+    code = code.upper().strip()
+    
+    file_instance = get_object_or_404(File, code=code)
     
     # Проверяем, не удален ли файл
     if file_instance.is_deleted:
-        raise Http404(_('Файл не найден'))
+        raise Http404('Файл не найден')
     
-    # Проверяем, не истек ли файл
-    if file_instance.is_expired():
-        raise Http404(_('Файл истек'))
+    # Проверяем, не истек ли файл (постоянные файлы никогда не истекают)
+    if not file_instance.is_permanent and file_instance.is_expired():
+        raise Http404('Файл истек')
     
     # Если файл защищен паролем, перенаправляем на детальную страницу
     if file_instance.is_protected:
@@ -498,16 +595,75 @@ def direct_pdf_view(request, code):
         return redirect('files:file_detail', code=file_instance.code)
     
     # Отдаем PDF файл напрямую для просмотра
-    file_stream = file_instance.file.open('rb')
-    response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
-    response['Content-Type'] = 'application/pdf'
-    response['Content-Length'] = file_instance.file_size
-    response['Content-Disposition'] = f'inline; filename="{file_instance.filename}"'
-    
-    # Увеличиваем счетчик просмотров
-    file_instance.increment_download_count()
-    
-    return response
+    try:
+        # Используем сжатую версию, если она есть
+        if file_instance.has_compressed_pdf():
+            file_stream = file_instance.compressed_pdf.open('rb')
+            response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
+            response['Content-Type'] = 'application/pdf'
+            response['Content-Length'] = file_instance.compressed_pdf_size
+            response['Content-Disposition'] = f'inline; filename="{file_instance.filename}"'
+            response['X-Compressed-PDF'] = 'true'
+            response['X-Original-Size'] = str(file_instance.file_size)
+            response['X-Compressed-Size'] = str(file_instance.compressed_pdf_size)
+        else:
+            # Пытаемся открыть файл через Django FileField
+            file_stream = file_instance.file.open('rb')
+            response = FileResponse(file_stream, as_attachment=False, filename=file_instance.filename)
+            response['Content-Type'] = 'application/pdf'
+            response['Content-Length'] = file_instance.file_size
+            response['Content-Disposition'] = f'inline; filename="{file_instance.filename}"'
+        
+        # Увеличиваем счетчик просмотров
+        file_instance.increment_download_count()
+        
+        return response
+    except (OSError, IOError):
+        # Если файл не найден через FileField, пытаемся найти его напрямую
+        file_path = file_instance.file.name
+        
+        # Если файл в папке demo_files, ищем его напрямую
+        if file_path.startswith('demo_files/'):
+            import os
+            from django.conf import settings
+            full_path = os.path.join(settings.BASE_DIR, file_path)
+            
+            if os.path.exists(full_path):
+                with open(full_path, 'rb') as f:
+                    response = FileResponse(f, as_attachment=False, filename=file_instance.filename)
+                    response['Content-Type'] = 'application/pdf'
+                    response['Content-Length'] = os.path.getsize(full_path)
+                    response['Content-Disposition'] = f'inline; filename="{file_instance.filename}"'
+                    
+                    # Увеличиваем счетчик просмотров
+                    file_instance.increment_download_count()
+                    
+                    return response
+        
+        # Для постоянных файлов пробуем найти по оригинальному пути
+        if file_instance.is_permanent:
+            # Пробуем несколько возможных путей
+            possible_paths = [
+                "/var/www/filehost/demo_files/uploads/catalog_moscow.pdf",
+                os.path.join(settings.BASE_DIR, "demo_files/uploads/catalog_moscow.pdf"),
+                os.path.join(settings.MEDIA_ROOT, "demo_files/uploads/catalog_moscow.pdf"),
+            ]
+            
+            for path in possible_paths:
+                if os.path.exists(path):
+                    with open(path, 'rb') as f:
+                        response = FileResponse(f, as_attachment=False, filename=file_instance.filename)
+                        response['Content-Type'] = 'application/pdf'
+                        response['Content-Length'] = os.path.getsize(path)
+                        response['Content-Disposition'] = f'inline; filename="{file_instance.filename}"'
+                        
+                        # Увеличиваем счетчик просмотров
+                        file_instance.increment_download_count()
+                        
+                        return response
+        
+        # Если файл не найден, показываем 404
+        raise Http404('Файл не найден')
 
 
 def search_files(request):
@@ -766,3 +922,10 @@ def error_404(request, exception):
 
 def error_500(request):
     return render(request, '500.html', status=500)
+
+
+def redirect_to_direct_pdf(request, code):
+    """
+    Перенаправляет на прямой просмотр PDF файла.
+    """
+    return redirect('files:direct_pdf_view', code=code)

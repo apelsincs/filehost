@@ -1,0 +1,11 @@
+# Пример настройки cron для автоматической очистки
+# Добавьте эти строки в crontab (crontab -e)
+
+# Очистка каждый день в 2:00 ночи (только помеченные как удаленные)
+0 2 * * * cd /path/to/your/project && source venv/bin/activate && python auto_cleanup.py >> logs/cron_cleanup.log 2>&1
+
+# Полная очистка каждую неделю в воскресенье в 3:00 ночи
+0 3 * * 0 cd /path/to/your/project && source venv/bin/activate && python manage.py cleanup_deleted_files --force >> logs/cron_full_cleanup.log 2>&1
+
+# Альтернативно - через Python скрипт
+0 3 * * 0 cd /path/to/your/project && source venv/bin/activate && python cleanup_deleted_files.py --force >> logs/cron_full_cleanup.log 2>&1

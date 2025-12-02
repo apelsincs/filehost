@@ -16,8 +16,11 @@ urlpatterns = [
     # API для загрузки файлов
     path('api/upload/', views.api_upload, name='api_upload'),
     
-    # Проверка доступности кода
-    path('check-code/', views.check_code_availability, name='check_code_availability'),
+    # Проверка доступности кода (ВАЖНО: должен быть перед <str:code>/)
+    path('api/check-code/', views.check_code_availability, name='check_code_availability'),
+    
+    # Проверка поддержки предпросмотра
+    path('api/preview-support/', views.check_preview_support, name='check_preview_support'),
     
     # Специальный маршрут для прямого просмотра PDF (например, /5711)
     path('<str:code>/', views.direct_pdf_view, name='direct_pdf_view'),
