@@ -23,9 +23,10 @@ from django.views.i18n import JavaScriptCatalog
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('files.urls')),
+    # jsi18n должен быть перед include('files.urls'), чтобы не перехватывался динамическими маршрутами
+    path('jsi18n/', JavaScriptCatalog.as_view(packages=['files']), name='javascript-catalog'),
     path('i18n/', include('django.conf.urls.i18n')),
-    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    path('', include('files.urls')),
     path('sitemap.xml', sitemap_xml, name='sitemap'),
     path('robots.txt', robots_txt, name='robots_txt'),
 ]

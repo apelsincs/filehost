@@ -68,7 +68,8 @@ def home(request):
             # Генерируем или используем кастомный код
             custom_code = form.cleaned_data.get('custom_code')
             if custom_code:
-                file_instance.code = custom_code
+                # Нормализуем код (верхний регистр, убираем пробелы)
+                file_instance.code = custom_code.upper().strip()
             else:
                 file_instance.code = generate_unique_code()
             
@@ -231,10 +232,15 @@ def file_detail(request, code):
     """
     Страница просмотра файла по коду.
     """
-    # Нормализуем код (верхний регистр, убираем пробелы)
+    # Нормализуем код (верхний регистр, убираем пробелы) для поиска
     code = code.upper().strip()
     
-    file_instance = get_object_or_404(File, code=code)
+    # Используем поиск без учета регистра на случай, если в БД есть старые записи
+    try:
+        file_instance = File.objects.get(code__iexact=code)
+    except File.DoesNotExist:
+        # Пробуем точное совпадение
+        file_instance = get_object_or_404(File, code=code)
     
     # Проверяем, не удален ли файл
     if file_instance.is_deleted:
@@ -285,7 +291,12 @@ def download_file(request, code):
     """
     Скачивание файла по коду.
     """
-    file_instance = get_object_or_404(File, code=code.upper())
+    # Нормализуем код для поиска
+    code = code.upper().strip()
+    try:
+        file_instance = File.objects.get(code__iexact=code)
+    except File.DoesNotExist:
+        file_instance = get_object_or_404(File, code=code)
     
     # Проверяем, не удален ли файл
     if file_instance.is_deleted:
@@ -327,7 +338,11 @@ def view_file(request, code):
     """
     Просмотр (inline) файла по коду. Для поддерживаемых браузером типов откроется предпросмотр.
     """
-    file_instance = get_object_or_404(File, code=code.upper())
+    code = code.upper().strip()
+    try:
+        file_instance = File.objects.get(code__iexact=code)
+    except File.DoesNotExist:
+        file_instance = get_object_or_404(File, code=code)
     
     # Базовые проверки
     if file_instance.is_deleted:
@@ -450,7 +465,11 @@ def edit_file(request, code):
     """
     Редактирование информации о файле.
     """
-    file_instance = get_object_or_404(File, code=code.upper())
+    code = code.upper().strip()
+    try:
+        file_instance = File.objects.get(code__iexact=code)
+    except File.DoesNotExist:
+        file_instance = get_object_or_404(File, code=code)
     
     # Проверяем, не удален ли файл
     if file_instance.is_deleted:
@@ -467,7 +486,8 @@ def edit_file(request, code):
             # Обновляем код если указан новый
             new_code = form.cleaned_data.get('new_code')
             if new_code:
-                file_instance.code = new_code
+                # Нормализуем код (верхний регистр, убираем пробелы)
+                file_instance.code = new_code.upper().strip()
                 file_instance.generate_qr_code()  # Перегенерируем QR код
             
             # Обновляем пароль
@@ -506,7 +526,11 @@ def delete_file(request, code):
     """
     Удаление файла.
     """
-    file_instance = get_object_or_404(File, code=code.upper())
+    code = code.upper().strip()
+    try:
+        file_instance = File.objects.get(code__iexact=code)
+    except File.DoesNotExist:
+        file_instance = get_object_or_404(File, code=code)
     
     # Проверяем, не удален ли файл
     if file_instance.is_deleted:
@@ -571,10 +595,15 @@ def direct_pdf_view(request, code):
     Прямой просмотр PDF файла по коду (например, /5711).
     Если файл не PDF или защищен паролем, перенаправляет на детальную страницу.
     """
-    # Нормализуем код (верхний регистр, убираем пробелы)
+    # Нормализуем код (верхний регистр, убираем пробелы) для поиска
     code = code.upper().strip()
     
-    file_instance = get_object_or_404(File, code=code)
+    # Используем поиск без учета регистра на случай, если в БД есть старые записи
+    try:
+        file_instance = File.objects.get(code__iexact=code)
+    except File.DoesNotExist:
+        # Пробуем точное совпадение
+        file_instance = get_object_or_404(File, code=code)
     
     # Проверяем, не удален ли файл
     if file_instance.is_deleted:
@@ -759,7 +788,8 @@ def api_upload(request):
             
             custom_code = form.cleaned_data.get('custom_code')
             if custom_code:
-                file_instance.code = custom_code
+                # Нормализуем код (верхний регистр, убираем пробелы)
+                file_instance.code = custom_code.upper().strip()
             else:
                 file_instance.code = generate_unique_code()
             
